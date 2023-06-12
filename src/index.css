@@ -11,3 +11,30 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+/* singlepost.css style starts here */
+.post-div{
+  display: flex;
+ justify-content: center;
+ align-items: center;
+ height: 100vh; /* Adjust the height as needed */
+}
+.border{
+  border: 2px solid greenyellow;
+  padding: 20px;
+}
+.d-flex{
+ display: flex;
+ justify-content: space-around;
+ width: 550px;
+ 
+}
+.post-image{
+  width: 300px;
+  height: 300px;
+}
+/* singlepost.css style ends here */
+
+
+/* homepage.css starts here */
+/* homepage.css ends here */
