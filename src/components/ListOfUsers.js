@@ -63,23 +63,14 @@ export default function ListOfUsers() {
             users.map((user) => (
               <div key={user?.id}>
                 {user?.name && <p>{user.name}</p>}
-                {showConfirmation ? (
-                  <button
-                    onClick={() => (deleteById(user.id), handleShow())}
-                    className="btn btn-primary"
-                    disabled={loading} // Disable the button during loading and error
-                  >
-                    Delete
-                  </button>
-                ) : (
-                  <button
-                    onClick={() => deleteById(user.id)}
-                    className="btn btn-primary"
-                    disabled={loading} // Disable the button during loading and error
-                  >
-                    Delete
-                  </button>
-                )}
+
+                <button
+                  onClick={() => (deleteById(user.id), handleShow())}
+                  className="btn btn-primary"
+                  disabled={loading} // Disable the button during loading
+                >
+                  Delete
+                </button>
               </div>
             ))}
         </div>
