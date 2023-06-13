@@ -4,6 +4,7 @@ import 'bootstrap/dist/js/bootstrap.min.js';
 import EditUsersList from './components/EditUsersList';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import EditTodos from './components/EditTodos';
+import ListOfUsers from './components/ListOfUsers';
 
 function App() {
   return (
@@ -17,13 +18,16 @@ function App() {
             <li>
               <Link to="/todos">Todos</Link>
             </li>
-            
+            <li>
+              <Link to="/list">list</Link>
+            </li>
           </ul>
         </nav>
 
         <Routes>
           <Route path="/" element={<EditUsersList />} />
           <Route path="/todos" element={<EditTodos />} />
+          <Route path="/list" element={<ListOfUsers />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </div>
