@@ -1,13 +1,22 @@
-import { useState } from "react";
-import Button from "react-bootstrap/Button";
-import Modal from "react-bootstrap/Modal";
+import React, { useState } from 'react';
+import { Form, Button, Modal } from 'react-bootstrap';
 
-function ConfirmEdit({ onEditConfirm, handleCancel, show, idToEdit, initialData }) {
-  const [name, setName] = useState(initialData?.name || "");
-  const [email, setEmail] = useState(initialData?.email || "");
-  const [company, setCompany] = useState(initialData?.company?.name || "");
+function ConfirmEdit({
+  onEditConfirm,
+  handleCancel,
+  show,
+  idToEdit,
+  initialData,
+  disabled
+}) {
+  const [name, setName] = useState(initialData?.name || '');
+  const [email, setEmail] = useState(initialData?.email || '');
+  const [company, setCompany] = useState(initialData?.company?.name || '');
+  const [updateButtonDisabled, setUpdateButtonDisabled] = useState(disabled);
 
-  const handleEdit = () => {
+  const handleEdit = async () => {
+    setUpdateButtonDisabled(true);
+
     const updatedData = {
       name: name,
       email: email,
@@ -16,49 +25,60 @@ function ConfirmEdit({ onEditConfirm, handleCancel, show, idToEdit, initialData 
       },
     };
 
-    onEditConfirm(updatedData); // Pass updatedData to onEditConfirm function
-    handleCancel();
+    await onEditConfirm(updatedData); // Pass updatedData to onEditConfirm function
+
+    // Enable the buttons after successful update
+    setUpdateButtonDisabled(false);
+    
   };
+
+  
 
   return (
     <>
       <Modal show={show} onHide={handleCancel} centered>
         <Modal.Header closeButton>
-          <Modal.Title>Confirmation Alert</Modal.Title>
+          <Modal.Title>Edit User</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <h3>Are you sure you want to edit id: {idToEdit}?</h3>
-          <div>
-            <label>Name:</label>
-            <input
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
-          </div>
-          <div>
-            <label>Email:</label>
-            <input
-              type="text"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          </div>
-          <div>
-            <label>Company:</label>
-            <input
-              type="text"
-              value={company}
-              onChange={(e) => setCompany(e.target.value)}
-            />
-          </div>
+          <Form>
+            <Form.Group controlId="name">
+              <Form.Label>Name:</Form.Label>
+              <Form.Control
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                disabled={disabled || updateButtonDisabled}
+              />
+            </Form.Group>
+
+            <Form.Group controlId="email">
+              <Form.Label>Email:</Form.Label>
+              <Form.Control
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                disabled={disabled || updateButtonDisabled}
+              />
+            </Form.Group>
+
+            <Form.Group controlId="company">
+              <Form.Label>Company:</Form.Label>
+              <Form.Control
+                type="text"
+                value={company}
+                onChange={(e) => setCompany(e.target.value)}
+                disabled={disabled || updateButtonDisabled}
+              />
+            </Form.Group>
+          </Form>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleCancel}>
+          <Button variant="secondary" onClick={handleCancel} disabled={disabled || updateButtonDisabled}>
             Close
           </Button>
-          <Button variant="primary" onClick={handleEdit}>
-            Update
+          <Button variant="primary" onClick={handleEdit} disabled={disabled || updateButtonDisabled}>
+            {updateButtonDisabled || disabled ? 'Updating...' : 'Update'}
           </Button>
         </Modal.Footer>
       </Modal>

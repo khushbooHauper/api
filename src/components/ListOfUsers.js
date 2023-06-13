@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useDelete } from "../useDelete";
-import Confirmation from "../models/Confirmation";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Confirm from "../models/Confirm";
@@ -12,7 +11,7 @@ export default function ListOfUsers() {
   const [show, setShow] = useState(false);
 
   const handleShow = () => setShow(true);
-  const AfterDelete = (isSuccess, result) => {
+  const AfterDelete = (isSuccess, resultDelete) => {
     if (isSuccess) {
       toast.success("User deleted successfully");
     } else {
@@ -31,16 +30,13 @@ export default function ListOfUsers() {
   };
 
   const {
-    showConfirmation,
-    handleCancel,
     deleteById,
     deletefinally,
+    showConfirmationDelete,
+    handleCancelDelete,
     idToDelete,
-    loading,
-    error,
-    isSuccess,
-    result,
-  } = useDelete(deleteFunction, true, AfterDelete);
+    loadingDelete,
+    } = useDelete(deleteFunction, true, AfterDelete);
 
   useEffect(() => {
     axios
@@ -67,7 +63,7 @@ export default function ListOfUsers() {
                 <button
                   onClick={() => (deleteById(user.id), handleShow())}
                   className="btn btn-primary"
-                  disabled={loading} // Disable the button during loading
+                  disabled={loadingDelete} // Disable the button during loadingDelete
                 >
                   Delete
                 </button>
@@ -76,10 +72,10 @@ export default function ListOfUsers() {
         </div>
       </div>
 
-      {showConfirmation && (
+      {showConfirmationDelete && (
         <Confirm
           onClick={() => deletefinally(idToDelete)}
-          handleCancel={handleCancel}
+          handleCancel={handleCancelDelete}
           show={show}
         />
       )}

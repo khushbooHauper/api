@@ -2,31 +2,31 @@ import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import { Col, Row } from "react-bootstrap";
 
-function UserCard({ onEdit,onDelete, users, disabled }) {
+function TodoCard({ onEdit, onDelete, todos, disabled }) {
   return (
-    <div className="container">
+    <div classtitle="container">
       <Row>
-        {users &&
-          users.map((user, index) => (
+        {todos &&
+          todos.map((todo, index) => (
             <Col key={index} md={4} style={{ marginBottom: "20px" }}>
               <Card style={{ width: "18rem", marginBottom: "20px" }}>
                 <Card.Body>
-                  <Card.Title>Name: {user?.name}</Card.Title>
-                  <Card.Subtitle className="mb-2 text-muted">
-                    Company: {user?.company.name}
+                  <Card.Title>title: {todo?.title}</Card.Title>
+                  {/* <Card.Subtitle classtitle="mb-2 text-muted">
+                    Company: {todo?.company.title}
                   </Card.Subtitle>
-                  <Card.Text>Email: {user?.email}</Card.Text>
+                  <Card.Text>Email: {todo?.email}</Card.Text> */}
                   <Button
                     variant="primary"
                     className="m-2"
-                    onClick={() => onEdit(user?.id)}
+                    onClick={() => onEdit(todo?.id)}
                     disabled={disabled}
                   >
                     Edit
                   </Button>
                   <Button
                     variant="outline-danger"
-                    onClick={() => onDelete(user?.id)}
+                    onClick={() => onDelete(todo?.id)}
                     disabled={disabled}
                   >
                     Delete
@@ -40,4 +40,4 @@ function UserCard({ onEdit,onDelete, users, disabled }) {
   );
 }
 
-export default UserCard;
+export default TodoCard;

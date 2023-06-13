@@ -1,57 +1,58 @@
 import { useEdit } from "../hooks/useEdit";
-import UserCard from "./UserCard";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import ConfirmEdit from "../models/ConfirmEdit";
+import TodoCard from "./TodoCard";
+import TodoEdit from "../models/TodoEdit";
 import { useDelete } from "../useDelete";
 import Confirm from "../models/Confirm";
 
-export default function EditUsersList() {
-  const [users, setUsers] = useState([]);
+export default function EditTodos() {
+  const [todos, settodos] = useState([]);
   const [show, setShow] = useState(false);
 
   const handleShow = () => setShow(true);
   const AfterDelete = (isSuccess, resultDelete) => {
     if (isSuccess) {
-      toast.success("User deleted successfully");
+      toast.success("todo deleted successfully");
     } else {
-      toast.error("Error deleting user");
+      toast.error("Error deleting todo");
     }
   };
   const deleteFunction = async (id) => {
     const response = await axios.delete(
-      `https://jsonplaceholder.typicode.com/users/${id}`
+      `https://jsonplaceholder.typicode.com/todos/${id}`
     );
    
-    const filteredUsers = users.filter((user) => user.id !== id);
-    setUsers(filteredUsers);
+    const filteredTodos = todos.filter((todo) => todo.id !== id);
+    settodos(filteredTodos);
     return response;
   };
 
   const AfterEdit = (isSuccess, result) => {
     if (isSuccess) {
-      toast.success("User updated successfully");
-      // Update the users state with the modified user data
-      setUsers((prevUsers) =>
-        prevUsers.map((user) => (user.id === idToEdit ? result : user))
+      toast.success("todo updated successfully");
+      // Update the todos state with the modified todo data
+      settodos((prevtodos) =>
+        prevtodos.map((todo) => (todo.id === idToEdit ? result : todo))
       );
       handleCancel(); // Close the modal after successful update
     } else {
-      toast.error("Error updating user");
+      toast.error("Error updating todo");
     }
   };
 
   const EditFunction = async (id, updatedData) => {
     try {
       const response = await axios.patch(
-        `https://jsonplaceholder.typicode.com/users/${id}`,
+        `https://jsonplaceholder.typicode.com/todos/${id}`,
         updatedData
       );
       return response;
     } catch (error) {
-      console.error("Error updating user:", error);
+      console.error("Error updating todo:", error);
       throw error;
     }
   };
@@ -75,25 +76,24 @@ export default function EditUsersList() {
     idToDelete,
     loadingDelete,
     } = useDelete(deleteFunction, true, AfterDelete);
+
   useEffect(() => {
     axios
-      .get("https://jsonplaceholder.typicode.com/users")
+      .get("https://jsonplaceholder.typicode.com/todos")
       .then((response) => {
-        setUsers(response.data);
+        settodos(response.data);
       })
       .catch((error) => {
-        toast.error("Error fetching users");
+        toast.error("Error fetching todos");
       });
   }, []);
 
   const handleEdit = (id) => {
-    const userToEdit = users.find((user) => user.id === id);
-    if (userToEdit) {
+    const todoToEdit = todos.find((todo) => todo.id === id);
+    if (todoToEdit) {
       const initialData = {
-        name: userToEdit.name,
-        email: userToEdit.email,
-        company: userToEdit.company,
-      };
+        title: todoToEdit.title,
+        };
 
       EditById(id, initialData);
     }
@@ -102,7 +102,6 @@ export default function EditUsersList() {
   const handleEditConfirmation = (updatedData) => {
     editFinally(idToEdit, updatedData);
   };
- 
   const handleDelete =(id)=>{
     deleteById(id)
     handleShow()
@@ -110,11 +109,11 @@ export default function EditUsersList() {
 
   return (
     <>
-    <h1 className="text-center mb-3"> Users List</h1>
+     <h1 className="text-center mb-3"> Todo List</h1>
       <div>
-        <UserCard users={users} onEdit={handleEdit} disabled={loading || loadingDelete}  onDelete={handleDelete}/>
+        <TodoCard todos={todos} onEdit={handleEdit}  disabled={loading || loadingDelete} onDelete={handleDelete}/>
         {showConfirmation && (
-          <ConfirmEdit
+          <TodoEdit
             idToEdit={idToEdit}
             onEditConfirm={handleEditConfirmation}
             handleCancel={handleCancel}

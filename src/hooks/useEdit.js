@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export const useEdit = (editFunction, confirmPrompt, handleResponse) => {
+export const useEdit = (editFunction, handleResponse) => {
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -10,13 +10,9 @@ export const useEdit = (editFunction, confirmPrompt, handleResponse) => {
   const [updatedData, setUpdatedData] = useState(null);
 
   const EditById = (id, data) => {
-    if (confirmPrompt) {
       setIdToEdit(id);
       setUpdatedData(data);
       setShowConfirmation(true);
-    } else {
-      editFinally(id, data);
-    }
   };
 
   const editFinally = async (id, data) => {
@@ -42,16 +38,17 @@ export const useEdit = (editFunction, confirmPrompt, handleResponse) => {
   };
 
   return {
-    showConfirmation,
     EditById,
     editFinally,
     showConfirmation,
     handleCancel,
     result,
     idToEdit,
+    setIdToEdit,
     loading,
     error,
     isSuccess,
     updatedData,
+    setUpdatedData,
   };
 };
